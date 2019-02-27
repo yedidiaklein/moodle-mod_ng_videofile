@@ -141,7 +141,8 @@ class mod_videostream_renderer extends plugin_renderer_base {
         
         $data = array('width' => $width,
                       'height' => $height,
-                      'hlsstream' => $this->createHLS($videostream->get_instance()->videoid));           
+                      'hlsstream' => $this->createHLS($videostream->get_instance()->videoid),
+                      'wwwroot' => $CFG->wwwroot);           
         $output = $OUTPUT->render_from_template("mod_videostream/hls", $data);           
         $output .= $this->video_events($videostream);
         return $output;

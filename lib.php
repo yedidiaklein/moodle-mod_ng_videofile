@@ -213,7 +213,7 @@ function videostream_get_extra_capabilities() {
  *                        will know about (most noticeably, an icon).
  */
 function videostream_get_coursemodule_info($coursemodule) {
-    global $DB, $OUTPUT, $CFG;
+    global $PAGE, $DB, $OUTPUT, $CFG;
 
     $dbparams = array('id' => $coursemodule->instance);
     $fields = 'id, name, intro, introformat, inline, videoid';
@@ -236,8 +236,21 @@ function videostream_get_coursemodule_info($coursemodule) {
     }
 	
 	if ($videostream->inline) {
-		$result->content .= $OUTPUT->render_from_template('mod_videostream/inlinevideo', array('id' => $videostream->videoid, 'wwwroot' => $CFG->wwwroot));
-	}
+        $config = get_config('videostream');
+        if ($config->streaming == "hls") {
+        // TODO : add dash
+            $renderer = $PAGE->get_renderer('mod_videostream');
+            $data = array('width' => '640px',
+                      'height' => '480px',
+                      'hlsstream' => $renderer->createHLS($videostream->videoid),
+                      'wwwroot' => $CFG->wwwroot );  
+            $result->content .= '<span>' .
+                                $OUTPUT->render_from_template("mod_videostream/hls", $data) .
+                                '</span>'; 
+        } else {
+		    $result->content .= $OUTPUT->render_from_template('mod_videostream/inlinevideo', array('id' => $videostream->videoid, 'wwwroot' => $CFG->wwwroot));
+        }
+    }
 
     return $result;
 }
