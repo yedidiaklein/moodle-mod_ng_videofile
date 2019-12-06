@@ -186,28 +186,29 @@ class mod_videostream_renderer extends plugin_renderer_base {
 
 
     /**
-     * Utility function for creating the symlink/php video source elements HTML. return a basic videojs player for php/symlink pseudo streaming
+     * Utility function for creating the symlink/php video source elements HTML.
+     * return a basic videojs player for php/symlink pseudo streaming
      *
      * @param obj $videostream
-     *        string $type 
+     *        string $type
      * @return string HTML
      */
-    private function get_video_source_elements_videojs($videostream,$type) {
+    private function get_video_source_elements_videojs($videostream, $type) {
         global $CFG;
-		$width = ($videostream->get_instance()->responsive ?
+        $width = ($videostream->get_instance()->responsive ?
                   '100%' : $videostream->get_instance()->width . "px");
         $height = ($videostream->get_instance()->responsive ?
                    'auto' : $videostream->get_instance()->height . "px");
 
-        $output = '<video id=videostream class="video-js vjs-default-skin" data-setup=\'{}\' 
-                    style="position: relative !important; width: ' . $width . ' !important; height: '. $height .' !important;" 
-                    controls> 
-                    <track label="English" kind="subtitles" srclang="en" 
-                    src="'.$CFG->wwwroot.'/local/video_directory/subs.php?video_id='.$videostream->get_instance()->videoid.'" default>
+        $output = '<video id=videostream class="video-js vjs-default-skin" data-setup=\'{}\'
+                    style="position: relative"' // !important; width: ' . $width . ' !important; height: '. $height . ' !important;"
+                    . 'controls >
+                    <track label="English" kind="subtitles" srclang="en"
+                    src="' . $CFG->wwwroot . '/local/video_directory/subs.php?video_id=' . $videostream->get_instance()->videoid . '" default>
                     </video>
                         <script src="https://vjs.zencdn.net/6.6.3/video.js"></script>
                     <script>
-                        var player = videojs("videostream",{      
+                        var player = videojs("videostream",{
                             playbackRates: [0.5, 1, 1.5, 2, 3]
                         });';
         $output .= 'player.src({ src: \'';
