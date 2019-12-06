@@ -135,9 +135,9 @@ class mod_videostream_renderer extends plugin_renderer_base {
     private function get_video_source_elements_hls($videostream) {
         global $CFG, $OUTPUT;
         $width = ($videostream->get_instance()->responsive ?
-                  '100%' : '');
+                  '100%' : $videostream->get_instance()->width . 'px');
         $height = ($videostream->get_instance()->responsive ?
-                   '100%' : '');
+                   '100%' : $videostream->get_instance()->height . 'px');
 
         $data = array('width' => $width,
                       'height' => $height,
