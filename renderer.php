@@ -50,7 +50,6 @@ class mod_videostream_renderer extends plugin_renderer_base {
         $coursemoduleid = $videostream->get_course_module()->id;
         $context = context_module::instance($coursemoduleid);
 
-
         // Header setup.
         $this->page->set_title($title);
         $this->page->set_heading($this->page->course->fullname);
@@ -104,7 +103,7 @@ class mod_videostream_renderer extends plugin_renderer_base {
     private function video_events($videostream) {
         global $CFG;
         $sesskey = sesskey();
-        $jsmediaevent="<script language='JavaScript'>
+        $jsmediaevent = "<script language='JavaScript'>
             var v = document.getElementsByTagName('video')[0];
 
             v.addEventListener('seeked', function() { sendEvent('seeked'); }, true);
@@ -117,7 +116,10 @@ class mod_videostream_renderer extends plugin_renderer_base {
             function sendEvent(event) {
                 console.log(event);
                 require(['jquery'], function($) {
-                    $.post('".$CFG->wwwroot."/mod/videostream/ajax.php',{ mid: ".$videostream->get_course_module()->id.",videoid: ".$videostream->get_instance()->videoid.",action: event,sesskey: '".$sesskey."' } );
+                    $.post('".$CFG->wwwroot."/mod/videostream/ajax.php',
+                     { mid: ".$videostream->get_course_module()->id.",
+                        videoid: ".$videostream->get_instance()->videoid.",
+                        action: event,sesskey: '".$sesskey."' } );
                 });
             }
 
@@ -141,7 +143,7 @@ class mod_videostream_renderer extends plugin_renderer_base {
 
         $data = array('width' => $width,
                       'height' => $height,
-                      'hlsstream' => $this->createHLS($videostream->get_instance()->videoid),
+                      'hlsstream' => $this->createhls($videostream->get_instance()->videoid),
                       'wwwroot' => $CFG->wwwroot);
         $output = $OUTPUT->render_from_template("mod_videostream/hls", $data);
         $output .= $this->video_events($videostream);
@@ -162,21 +164,22 @@ class mod_videostream_renderer extends plugin_renderer_base {
         $height = ($videostream->get_instance()->responsive ?
                    'auto' : $videostream->get_instance()->height . "px");
 
-        $output = '<video id=videostream class="video-js vjs-default-skin" data-setup=\'{}\' 
-                    style="position: relative !important; width: ' . $width . ' !important; height: '. $height . ' !important;" 
-                    controls> 
-                    <track label="English" kind="subtitles" srclang="en" 
-                    src="'.$CFG->wwwroot.'/local/video_directory/subs.php?video_id='.$videostream->get_instance()->videoid.'" default>
+        $output = '<video id=videostream class="video-js vjs-default-skin" data-setup=\'{}\'
+                    style="position: relative !important; width: ' . $width . ' !important; height: '. $height . ' !important;"
+                    controls>
+                    <track label="English" kind="subtitles" srclang="en"
+                    src=
+                    "'.$CFG->wwwroot.'/local/video_directory/subs.php?video_id='.$videostream->get_instance()->videoid.'" default>
                     </video>
                         <script src="https://vjs.zencdn.net/6.6.3/video.js"></script>
                         <script src="dash/dash.all.min.js"></script>
                         <script src="dash/videojs-dash.min.js"></script>
                     <script>
-                        var player = videojs("videostream",{      
+                        var player = videojs("videostream",{
                             playbackRates: [0.5, 1, 1.5, 2, 3]
                         });';
         $output .= 'player.src({ src: \'';
-        $output .=  $this->createDASH($videostream->get_instance()->videoid);
+        $output .= $this->createdash($videostream->get_instance()->videoid);
         $output .= '\', type: \'application/dash+xml\'});
                             player.play();
                         </script>';
@@ -201,10 +204,11 @@ class mod_videostream_renderer extends plugin_renderer_base {
                    'auto' : $videostream->get_instance()->height . "px");
 
         $output = '<video id=videostream class="video-js vjs-default-skin" data-setup=\'{}\'
-                    style="position: relative"' // !important; width: ' . $width . ' !important; height: '. $height . ' !important;"
+                    style="position: relative"'
                     . 'controls >
                     <track label="English" kind="subtitles" srclang="en"
-                    src="' . $CFG->wwwroot . '/local/video_directory/subs.php?video_id=' . $videostream->get_instance()->videoid . '" default>
+                    src="' . $CFG->wwwroot . '/local/video_directory/subs.php?video_id=' .
+                        $videostream->get_instance()->videoid . '" default>
                     </video>
                         <script src="https://vjs.zencdn.net/6.6.3/video.js"></script>
                     <script>
@@ -213,9 +217,9 @@ class mod_videostream_renderer extends plugin_renderer_base {
                         });';
         $output .= 'player.src({ src: \'';
         if ($type == "symlink") {
-            $output .=  $this->createsymlink($videostream->get_instance()->videoid);
-        } else { //php
-            $output .=  $CFG->wwwroot.'/local/video_directory/play.php?video_id='.$videostream->get_instance()->videoid;
+            $output .= $this->createsymlink($videostream->get_instance()->videoid);
+        } else {
+            $output .= $CFG->wwwroot.'/local/video_directory/play.php?video_id='.$videostream->get_instance()->videoid;
         }
             $output .= '\', type: \'video/mp4\'});
                             player.play();
@@ -242,20 +246,18 @@ class mod_videostream_renderer extends plugin_renderer_base {
         $output .= $this->output->container_start($vclass);
 
         // Open video tag.
-        //$posterurl = $this->get_poster_image($contextid);
-        //$output .= $this->get_video_element_html($videostream, $posterurl);
-		$config = get_config('videostream');
+        $config = get_config('videostream');
 
         if (($config->streaming == "symlink") || ($config->streaming == "php")) {
-        	// Elements for video sources. (here we get the symlink and php video)
-        	$output .= $this->get_video_source_elements_videojs($videostream,$config->streaming);
-		} elseif ($config->streaming == "hls") {
-        	// Elements for video sources. (here we get the hls video)
-        	$output .= $this->get_video_source_elements_hls($videostream);
+            // Elements for video sources. (here we get the symlink and php video).
+            $output .= $this->get_video_source_elements_videojs($videostream, $config->streaming);
+        } else if ($config->streaming == "hls") {
+            // Elements for video sources. (here we get the hls video).
+            $output .= $this->get_video_source_elements_hls($videostream);
         } else {
-			//Dash video
-			$output .= $this->get_video_source_elements_dash($videostream);
-		}
+            // Dash video.
+            $output .= $this->get_video_source_elements_dash($videostream);
+        }
 
         // Close video tag.
         $output .= html_writer::end_tag('video');
@@ -267,72 +269,72 @@ class mod_videostream_renderer extends plugin_renderer_base {
         return $output;
     }
 
-	public function get_bookmark_controls($moduleid) {
-		global $DB, $USER;
-		$output = '';
-		$bookmarks = $DB->get_records('videostreambookmarks', ['userid' => $USER->id, 'moduleid' => $moduleid]);
-		$bookmarks = array_values(array_map(function($a) {
-			$a->bookmarkpositionvisible = gmdate("H:i:s", (int)$a->bookmarkposition);
-			return $a;
-		}, $bookmarks));
-		$output .= $this->output->render_from_template('mod_videostream/bookmark_controls', ['bookmarks' => $bookmarks, 'moduleid' => $moduleid]);
-		return $output;
+    public function get_bookmark_controls($moduleid) {
+        global $DB, $USER;
+        $output = '';
+        $bookmarks = $DB->get_records('videostreambookmarks', ['userid' => $USER->id, 'moduleid' => $moduleid]);
+        $bookmarks = array_values(array_map(function($a) {
+            $a->bookmarkpositionvisible = gmdate("H:i:s", (int)$a->bookmarkposition);
+            return $a;
+        }, $bookmarks));
+        $output .= $this->output->render_from_template('mod_videostream/bookmark_controls',
+                            ['bookmarks' => $bookmarks, 'moduleid' => $moduleid]);
+        return $output;
     }
 
-	public function createHLS($videoid) {
-		global $DB;
-		
-		$config = get_config('videostream');
- 
-		$hls_streaming = $config->hls_base_url;
+    public function createhls($videoid) {
+        global $DB;
 
-		$id = $videoid;
-		$streams = $DB->get_records("local_video_directory_multi",array("video_id" => $id));
-		foreach ($streams as $stream) {
-			$files[]=$stream->filename;
-		}
+        $config = get_config('videostream');
 
-		$parts=array();
-		foreach ($files as $file) {
-			$parts[] = preg_split("/[_.]/", $file);
-		}
+        $hlsstreaming = $config->hls_base_url;
 
-		$hls_url = $hls_streaming . $parts[0][0] . "_";
-		foreach ($parts as $key => $value) {
-			$hls_url .= "," . $value[1];
-		}
-		$hls_url .= "," . ".mp4".$config->nginx_multi."/master.m3u8";
+        $id = $videoid;
+        $streams = $DB->get_records("local_video_directory_multi", array("video_id" => $id));
+        foreach ($streams as $stream) {
+            $files[] = $stream->filename;
+        }
 
-		return $hls_url;			
-	}
+        $parts = array();
+        foreach ($files as $file) {
+            $parts[] = preg_split("/[_.]/", $file);
+        }
 
-	public function createDASH($videoid) {
-		global $DB;
+        $hlsurl = $hlsstreaming . $parts[0][0] . "_";
+        foreach ($parts as $key => $value) {
+            $hlsurl .= "," . $value[1];
+        }
+        $hlsurl .= "," . ".mp4".$config->nginx_multi."/master.m3u8";
 
-		
-		$config = get_config('videostream');
- 
-		$dash_streaming = $config->dash_base_url;
-		
-		$id = $videoid;
-		$streams = $DB->get_records("local_video_directory_multi",array("video_id" => $id));
-		foreach ($streams as $stream) {
-			$files[]=$stream->filename;
-		}
+        return $hlsurl;
+    }
 
-		$parts=array();
-		foreach ($files as $file) {
-			$parts[] = preg_split("/[_.]/", $file);
-		}
+    public function createdash($videoid) {
+        global $DB;
 
-		$dash_url = $dash_streaming . $parts[0][0] . "_";
-		foreach ($parts as $key => $value) {
-			$dash_url .= "," . $value[1];
-		}
-		$dash_url .= "," . ".mp4".$config->nginx_multi."/manifest.mpd";
+        $config = get_config('videostream');
 
-		return $dash_url;			
-	}
+        $dashstreaming = $config->dash_base_url;
+
+        $id = $videoid;
+        $streams = $DB->get_records("local_video_directory_multi", array("video_id" => $id));
+        foreach ($streams as $stream) {
+            $files[] = $stream->filename;
+        }
+
+        $parts = array();
+        foreach ($files as $file) {
+            $parts[] = preg_split("/[_.]/", $file);
+        }
+
+        $dashurl = $dashstreaming . $parts[0][0] . "_";
+        foreach ($parts as $key => $value) {
+            $dashurl .= "," . $value[1];
+        }
+        $dashurl .= "," . ".mp4".$config->nginx_multi."/manifest.mpd";
+
+        return $dashurl;
+    }
 
     public function createsymlink($videoid) {
         global $DB;
@@ -344,16 +346,14 @@ class mod_videostream_renderer extends plugin_renderer_base {
         return $config->streaming . "/" . $filename;
     }
 
-	
-	public function get_rate_buttons() {
-		$speeds = array(0.5,1,1.5,2,2.5,3);
-		$output = "<div class='rates'>".get_string('playback_rate','videostream').": ";
-		foreach ($speeds as $value) { 
-			$output .= '<a class="playrate" onclick="document.getElementById(\'video\').playbackRate='.$value.'">X'.$value.'</a> ';	
-		}
-		$output .= "</div>";
-		return $output;
-	}
-	
 
+    public function get_rate_buttons() {
+        $speeds = array(0.5, 1, 1.5, 2, 2.5, 3);
+        $output = "<div class='rates'>" . get_string('playback_rate', 'videostream').": ";
+        foreach ($speeds as $value) {
+            $output .= '<a class="playrate" onclick="document.getElementById(\'video\').playbackRate='.$value.'">X'.$value.'</a> ';
+        }
+        $output .= "</div>";
+        return $output;
+    }
 }
