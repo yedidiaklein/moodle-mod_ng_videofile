@@ -106,21 +106,21 @@ class mod_videostream_renderer extends plugin_renderer_base {
         $sesskey = sesskey();
         $jsmediaevent="<script language='JavaScript'>
             var v = document.getElementsByTagName('video')[0];
-    
+
             v.addEventListener('seeked', function() { sendEvent('seeked'); }, true);
             v.addEventListener('play', function() { sendEvent('play'); }, true);
             v.addEventListener('stop', function() { sendEvent('stop'); }, true);
             v.addEventListener('pause', function() { sendEvent('pause'); }, true);
             v.addEventListener('ended', function() { sendEvent('ended'); }, true);
             v.addEventListener('ratechange', function() { sendEvent('ratechange'); }, true);
-    
+
             function sendEvent(event) {
                 console.log(event);
                 require(['jquery'], function($) {
                     $.post('".$CFG->wwwroot."/mod/videostream/ajax.php',{ mid: ".$videostream->get_course_module()->id.",videoid: ".$videostream->get_instance()->videoid.",action: event,sesskey: '".$sesskey."' } );
                 });
             }
-    
+
         </script>";
         return $jsmediaevent;
     }
@@ -157,13 +157,13 @@ class mod_videostream_renderer extends plugin_renderer_base {
      */
     private function get_video_source_elements_dash($videostream) {
         global $CFG;
-		$width = ($videostream->get_instance()->responsive ?
+        $width = ($videostream->get_instance()->responsive ?
                   '100%' : $videostream->get_instance()->width . "px");
         $height = ($videostream->get_instance()->responsive ?
                    'auto' : $videostream->get_instance()->height . "px");
 
         $output = '<video id=videostream class="video-js vjs-default-skin" data-setup=\'{}\' 
-                    style="position: relative !important; width: ' . $width . ' !important; height: '. $height .' !important;" 
+                    style="position: relative !important; width: ' . $width . ' !important; height: '. $height . ' !important;" 
                     controls> 
                     <track label="English" kind="subtitles" srclang="en" 
                     src="'.$CFG->wwwroot.'/local/video_directory/subs.php?video_id='.$videostream->get_instance()->videoid.'" default>
@@ -213,7 +213,7 @@ class mod_videostream_renderer extends plugin_renderer_base {
                         });';
         $output .= 'player.src({ src: \'';
         if ($type == "symlink") {
-            $output .=  $this->createSYMLINK($videostream->get_instance()->videoid);
+            $output .=  $this->createsymlink($videostream->get_instance()->videoid);
         } else { //php
             $output .=  $CFG->wwwroot.'/local/video_directory/play.php?video_id='.$videostream->get_instance()->videoid;
         }
@@ -334,10 +334,15 @@ class mod_videostream_renderer extends plugin_renderer_base {
 		return $dash_url;			
 	}
 
-    public function createSYMLINK($videoid) {
-		$config = get_config('local_video_directory');
-		return $config->streaming . "/" . $videoid . ".mp4";			
-	}
+    public function createsymlink($videoid) {
+        global $DB;
+        $filename = $DB->get_field('local_video_directory', 'filename', [ 'id' => $videoid ]);
+        if (substr($filename, 0, -4) != '.mp4') {
+            $filename .= $filename . '.mp4';
+        }
+        $config = get_config('local_video_directory');
+        return $config->streaming . "/" . $filename;
+    }
 
 	
 	public function get_rate_buttons() {
