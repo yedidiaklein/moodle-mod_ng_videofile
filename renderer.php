@@ -338,7 +338,7 @@ class mod_videostream_renderer extends plugin_renderer_base {
         global $DB;
         $filename = $DB->get_field('local_video_directory', 'filename', [ 'id' => $videoid ]);
         if (substr($filename, 0, -4) != '.mp4') {
-            $filename .= $filename . '.mp4';
+            $filename .= '.mp4';
         }
         $config = get_config('local_video_directory');
         return $config->streaming . "/" . $filename;
