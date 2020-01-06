@@ -33,7 +33,7 @@ class backup_videostream_activity_structure_step extends backup_activity_structu
     protected function define_structure() {
         // Define each element separated.
         $videostream = new backup_nested_element('videostream', array('id'), array(
-            'name', 'intro', 'introformat',
+            'name', 'intro', 'introformat', 'inline',
             'width', 'height','responsive','videoid',
             'timecreated', 'timemodified'));
 
