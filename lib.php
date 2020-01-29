@@ -248,7 +248,9 @@ function videostream_get_coursemodule_info($coursemodule) {
                                 $OUTPUT->render_from_template("mod_videostream/hls", $data) .
                                 '</span>'; 
         } else {
-		    $result->content .= $OUTPUT->render_from_template('mod_videostream/inlinevideo', array('id' => $videostream->videoid, 'wwwroot' => $CFG->wwwroot));
+            require_once(__DIR__ . '/../../local/video_directory/locallib.php');
+            $videoname = local_video_directory_get_filename($videostream->videoid) . '.mp4';
+		    $result->content .= $OUTPUT->render_from_template('mod_videostream/inlinevideo', array('name' => $videoname, 'wwwroot' => $CFG->wwwroot));
         }
     }
 
