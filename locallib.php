@@ -343,4 +343,89 @@ class videostream {
         $this->output = $PAGE->get_renderer('mod_videostream');
         return $this->output;
     }
+ 
 }
+
+
+
+//<tovi
+ function createhls($videoid) {
+    global $DB;
+
+    $config = get_config('videostream');
+
+    $hlsstreaming = $config->hls_base_url;
+
+    $id = $videoid;
+    $streams = $DB->get_records("local_video_directory_multi", array("video_id" => $id));
+    foreach ($streams as $stream) {
+        $files[] = $stream->filename;
+    }
+
+    $parts = array();
+    foreach ($files as $file) {
+        $parts[] = preg_split("/[_.]/", $file);
+    }
+
+    $hlsurl = $hlsstreaming . $parts[0][0] . "_";
+    foreach ($parts as $key => $value) {
+        $hlsurl .= "," . $value[1];
+    }
+    $hlsurl .= "," . ".mp4".$config->nginx_multi."/master.m3u8";
+
+    return $hlsurl;
+}
+
+ function createdash($videoid) {
+    global $DB;
+
+    $config = get_config('videostream');
+
+    $dashstreaming = $config->dash_base_url;
+
+    $id = $videoid;
+    $streams = $DB->get_records("local_video_directory_multi", array("video_id" => $id));
+    foreach ($streams as $stream) {
+        $files[] = $stream->filename;
+    }
+
+    $parts = array();
+    foreach ($files as $file) {
+        $parts[] = preg_split("/[_.]/", $file);
+    }
+
+    $dashurl = $dashstreaming . $parts[0][0] . "_";
+    foreach ($parts as $key => $value) {
+        $dashurl .= "," . $value[1];
+    }
+    $dashurl .= "," . ".mp4".$config->nginx_multi."/manifest.mpd";
+
+    return $dashurl;
+}
+
+function createsymlink($videoid) {
+    global $DB;
+   
+    $filename = $DB->get_field('local_video_directory', 'filename', [ 'id' => $videoid ]);
+   
+    if (substr($filename, -4) != '.mp4') {
+        $filename .= '.mp4';
+    }
+  
+    $config = get_config('local_video_directory');
+    return $config->streaming . "/" . $filename;
+}
+
+// function get_rate_buttons()
+// {
+//     $speeds = array(0.5, 1, 1.5, 2, 2.5, 3);
+//     $output = "<div class='rates'>" . get_string('playback_rate', 'videostream') . ": ";
+//     foreach ($speeds as $value) {
+//         $output .= '<a class="playrate" onclick="document.getElementById(\'video\').playbackRate=' . $value . '">X' . $value . '</a> ';
+//     }
+
+//     return $output;
+//     $output .= "</div>";
+// }
+
+//tovi>
