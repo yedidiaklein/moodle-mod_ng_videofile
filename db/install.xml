@@ -31,6 +31,7 @@
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="moduleid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="module id"/>
+        <FIELD NAME="videoid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="video id"/>
         <FIELD NAME="bookmarkposition" TYPE="number" LENGTH="12" NOTNULL="false" SEQUENCE="false" DECIMALS="6" COMMENT="bookmark position"/>
         <FIELD NAME="bookmarkname" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="bookmark name"/>
         <FIELD NAME="bookmarkflag" TYPE="int" LENGTH="1" NOTNULL="false" SEQUENCE="false" COMMENT="bookmark flag"/>

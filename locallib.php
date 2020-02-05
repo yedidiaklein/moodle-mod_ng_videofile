@@ -105,7 +105,7 @@ class videostream {
         $add->height = $formdata->height;
         $add->responsive = $formdata->responsive;
         $add->inline = $formdata->inline;
-	$add->videoid = $formdata->videoid;
+        $add->videoid = $formdata->videoid;
 
         $returnid = $DB->insert_record('videostream', $add);
         $this->instance = $DB->get_record('videostream',
@@ -164,8 +164,7 @@ class videostream {
         $update->height = $formdata->height;
         $update->responsive = $formdata->responsive;
         $update->inline = $formdata->inline;
-	$update->videoid = $formdata->videoid;
-
+        $update->videoid = $formdata->videoid;
 
         $result = $DB->update_record('videostream', $update);
         $this->instance = $DB->get_record('videostream',
@@ -343,13 +342,9 @@ class videostream {
         $this->output = $PAGE->get_renderer('mod_videostream');
         return $this->output;
     }
- 
 }
 
-
-
-//<tovi
- function createhls($videoid) {
+function createhls($videoid) {
     global $DB;
 
     $config = get_config('videostream');
@@ -376,7 +371,7 @@ class videostream {
     return $hlsurl;
 }
 
- function createdash($videoid) {
+function createdash($videoid) {
     global $DB;
 
     $config = get_config('videostream');
@@ -405,27 +400,10 @@ class videostream {
 
 function createsymlink($videoid) {
     global $DB;
-   
     $filename = $DB->get_field('local_video_directory', 'filename', [ 'id' => $videoid ]);
-   
     if (substr($filename, -4) != '.mp4') {
         $filename .= '.mp4';
     }
-  
     $config = get_config('local_video_directory');
     return $config->streaming . "/" . $filename;
 }
-
-// function get_rate_buttons()
-// {
-//     $speeds = array(0.5, 1, 1.5, 2, 2.5, 3);
-//     $output = "<div class='rates'>" . get_string('playback_rate', 'videostream') . ": ";
-//     foreach ($speeds as $value) {
-//         $output .= '<a class="playrate" onclick="document.getElementById(\'video\').playbackRate=' . $value . '">X' . $value . '</a> ';
-//     }
-
-//     return $output;
-//     $output .= "</div>";
-// }
-
-//tovi>

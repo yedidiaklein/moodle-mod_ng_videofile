@@ -224,8 +224,7 @@ function videostream_get_coursemodule_info($coursemodule) {
 
     $result = new cached_cm_info();
     $result->name = $videostream->name;
-	$result->content = '';
-	
+    $result->content = '';
     if ($coursemodule->showdescription) {
         // Convert intro to html.
         // Do not filter cached version, filters run at display time.
@@ -234,23 +233,23 @@ function videostream_get_coursemodule_info($coursemodule) {
                                                $coursemodule->id,
                                                false);
     }
-	
-	if ($videostream->inline) {
+    if ($videostream->inline) {
         $config = get_config('videostream');
         if ($config->streaming == "hls") {
-        // TODO : add dash
+            // TODO : add dash
             $renderer = $PAGE->get_renderer('mod_videostream');
             $data = array('width' => '640px',
                       'height' => '480px',
-                      'hlsstream' => $renderer->createHLS($videostream->videoid),
-                      'wwwroot' => $CFG->wwwroot );  
+                      'hlsstream' => createhls($videostream->videoid),
+                      'wwwroot' => $CFG->wwwroot);
             $result->content .= '<span>' .
                                 $OUTPUT->render_from_template("mod_videostream/hls", $data) .
-                                '</span>'; 
+                                '</span>';
         } else {
             require_once(__DIR__ . '/../../local/video_directory/locallib.php');
             $videoname = local_video_directory_get_filename($videostream->videoid) . '.mp4';
-		    $result->content .= $OUTPUT->render_from_template('mod_videostream/inlinevideo', array('name' => $videoname, 'wwwroot' => $CFG->wwwroot));
+            $result->content .= $OUTPUT->render_from_template('mod_videostream/inlinevideo',
+            array('name' => $videoname, 'wwwroot' => $CFG->wwwroot));
         }
     }
 

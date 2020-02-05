@@ -21,10 +21,8 @@
  * @copyright  2017 Yedidia Klein <yedidia@openapp.co.il>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 defined('MOODLE_INTERNAL') || die();
-
-require_once $CFG->dirroot . '/mod/videostream/locallib.php';
+require_once( $CFG->dirroot . '/mod/videostream/locallib.php' );
 
 /**
  * videostream module renderer class
@@ -38,8 +36,7 @@ class mod_videostream_renderer extends plugin_renderer_base
      * @param videostream videostream
      * @return string
      */
-    public function video_header($videostream)
-    {
+    public function video_header($videostream) {
         global $CFG;
 
         $output = '';
@@ -74,8 +71,7 @@ class mod_videostream_renderer extends plugin_renderer_base
      *
      * @return string
      */
-    public function video_footer()
-    {
+    public function video_footer() {
         return $this->output->footer();
     }
 
@@ -85,8 +81,7 @@ class mod_videostream_renderer extends plugin_renderer_base
      * @param videostream videostream
      * @return string The page output.
      */
-    public function video_page($videostream)
-    {
+    public function video_page($videostream) {
         $output = '';
         $output .= $this->video_header($videostream);
         $output .= $this->video($videostream);
@@ -101,8 +96,7 @@ class mod_videostream_renderer extends plugin_renderer_base
      * @param obj $videostream
      * @return string JS
      */
-    private function video_events($videostream)
-    {
+    private function video_events($videostream) {
         global $CFG;
         $sesskey = sesskey();
         $jsmediaevent = "<script language='JavaScript'>
@@ -135,8 +129,7 @@ class mod_videostream_renderer extends plugin_renderer_base
      * @param obj $videostream
      * @return string HTML
      */
-    private function get_video_source_elements_hls($videostream)
-    {
+    private function get_video_source_elements_hls($videostream) {
         global $CFG, $OUTPUT;
         $width = ($videostream->get_instance()->responsive ?
             '100%' : $videostream->get_instance()->width . 'px');
@@ -158,8 +151,7 @@ class mod_videostream_renderer extends plugin_renderer_base
      * @param obj $videostream
      * @return string HTML
      */
-    private function get_video_source_elements_dash($videostream)
-    {
+    private function get_video_source_elements_dash($videostream) {
         global $CFG;
         $width = ($videostream->get_instance()->responsive ?
             '100%' : $videostream->get_instance()->width . "px");
@@ -197,8 +189,7 @@ class mod_videostream_renderer extends plugin_renderer_base
      *        string $type
      * @return string HTML
      */
-    private function get_video_source_elements_videojs($videostream, $type)
-    {
+    private function get_video_source_elements_videojs($videostream, $type) {
         global $CFG;
         $width = ($videostream->get_instance()->responsive ?
             '100%' : $videostream->get_instance()->width . "px");
@@ -237,8 +228,7 @@ class mod_videostream_renderer extends plugin_renderer_base
      * @param videostream $videostream
      * @return string HTML
      */
-    public function video(videostream $videostream)
-    {
+    public function video(videostream $videostream) {
         $output = '';
         $contextid = $videostream->get_context()->id;
 
@@ -271,8 +261,7 @@ class mod_videostream_renderer extends plugin_renderer_base
         return $output;
     }
 
-    public function get_bookmark_controls($moduleid)
-    {
+    public function get_bookmark_controls($moduleid) {
         global $DB, $USER;
         $output = '';
         $bookmarks = $DB->get_records('videostreambookmarks', ['userid' => $USER->id, 'moduleid' => $moduleid]);
@@ -285,79 +274,13 @@ class mod_videostream_renderer extends plugin_renderer_base
         return $output;
     }
 
-    // public function createhls($videoid) {
-    //     global $DB;
-
-    //     $config = get_config('videostream');
-
-    //     $hlsstreaming = $config->hls_base_url;
-
-    //     $id = $videoid;
-    //     $streams = $DB->get_records("local_video_directory_multi", array("video_id" => $id));
-    //     foreach ($streams as $stream) {
-    //         $files[] = $stream->filename;
-    //     }
-
-    //     $parts = array();
-    //     foreach ($files as $file) {
-    //         $parts[] = preg_split("/[_.]/", $file);
-    //     }
-
-    //     $hlsurl = $hlsstreaming . $parts[0][0] . "_";
-    //     foreach ($parts as $key => $value) {
-    //         $hlsurl .= "," . $value[1];
-    //     }
-    //     $hlsurl .= "," . ".mp4".$config->nginx_multi."/master.m3u8";
-
-    //     return $hlsurl;
-    // }
-
-    // public function createdash($videoid) {
-    //     global $DB;
-
-    //     $config = get_config('videostream');
-
-    //     $dashstreaming = $config->dash_base_url;
-
-    //     $id = $videoid;
-    //     $streams = $DB->get_records("local_video_directory_multi", array("video_id" => $id));
-    //     foreach ($streams as $stream) {
-    //         $files[] = $stream->filename;
-    //     }
-
-    //     $parts = array();
-    //     foreach ($files as $file) {
-    //         $parts[] = preg_split("/[_.]/", $file);
-    //     }
-
-    //     $dashurl = $dashstreaming . $parts[0][0] . "_";
-    //     foreach ($parts as $key => $value) {
-    //         $dashurl .= "," . $value[1];
-    //     }
-    //     $dashurl .= "," . ".mp4".$config->nginx_multi."/manifest.mpd";
-
-    //     return $dashurl;
-    // }
-
-    // public function createsymlink($videoid) {
-    //     global $DB;
-    //     $filename = $DB->get_field('local_video_directory', 'filename', [ 'id' => $videoid ]);
-    //     if (substr($filename, -4) != '.mp4') {
-    //         $filename .= '.mp4';
-    //     }
-    //     $config = get_config('local_video_directory');
-    //     return $config->streaming . "/" . $filename;
-    // }
-
-    public function get_rate_buttons()
-    {
+    public function get_rate_buttons() {
         $speeds = array(0.5, 1, 1.5, 2, 2.5, 3);
         $output = "<div class='rates'>" . get_string('playback_rate', 'videostream') . ": ";
         foreach ($speeds as $value) {
             $output .= '<a class="playrate" onclick="document.getElementById(\'video\').playbackRate=' . $value . '">X' . $value . '</a> ';
         }
-
-        return $output;
         $output .= "</div>";
+        return $output;
     }
 }

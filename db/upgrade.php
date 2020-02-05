@@ -124,7 +124,7 @@ function xmldb_videostream_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2017060403, 'videostream');
     }
 
-	if ($oldversion < 2017060404) {
+    if ($oldversion < 2017060404) {
 
         // Define table videostreambookmarks to be created.
         $table = new xmldb_table('videostreambookmarks');
@@ -146,13 +146,14 @@ function xmldb_videostream_upgrade($oldversion) {
 
         // Videostream savepoint reached.
         upgrade_mod_savepoint(true, 2017060404, 'videostream');
-    }
+    } 
 
-    if ($oldversion < 2017060405) {
+    if ($oldversion < 2017060406) {
 
         // Define field moduleid to be added to videostreambookmarks.
         $table = new xmldb_table('videostreambookmarks');
         $field = new xmldb_field('moduleid', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'userid');
+        $field = new xmldb_field('videoid', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
 
         // Conditionally launch add field moduleid.
         if (!$dbman->field_exists($table, $field)) {
@@ -160,7 +161,7 @@ function xmldb_videostream_upgrade($oldversion) {
         }
 
         // Videostream savepoint reached.
-        upgrade_mod_savepoint(true, 2017060405, 'videostream');
+        upgrade_mod_savepoint(true, 2017060406, 'videostream');
     }
 
     // Final return of upgrade result (true, all went good) to Moodle.
