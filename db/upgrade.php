@@ -146,9 +146,9 @@ function xmldb_videostream_upgrade($oldversion) {
 
         // Videostream savepoint reached.
         upgrade_mod_savepoint(true, 2017060404, 'videostream');
-    } 
+    }
 
-    if ($oldversion < 2017060406) {
+    if ($oldversion < 2017060409) {
 
         // Define field moduleid to be added to videostreambookmarks.
         $table = new xmldb_table('videostreambookmarks');
@@ -161,7 +161,7 @@ function xmldb_videostream_upgrade($oldversion) {
         }
 
         // Videostream savepoint reached.
-        upgrade_mod_savepoint(true, 2017060406, 'videostream');
+        upgrade_mod_savepoint(true, 2017060409, 'videostream');
     }
 
     // Final return of upgrade result (true, all went good) to Moodle.
