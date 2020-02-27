@@ -86,7 +86,6 @@ class mod_videostream_renderer extends plugin_renderer_base
         $output .= $this->video_header($videostream);
         $output .= $this->video($videostream);
         $output .= $this->video_footer();
-
         return $output;
     }
 
@@ -135,12 +134,14 @@ class mod_videostream_renderer extends plugin_renderer_base
             '100%' : $videostream->get_instance()->width . 'px');
         $height = ($videostream->get_instance()->responsive ?
             '100%' : $videostream->get_instance()->height . 'px');
-
+        $value = ($videostream->get_instance()->disableseek ?
+             true : false);
         $data = array('width' => $width,
             'height' => $height,
             'hlsstream' => createhls($videostream->get_instance()->videoid),
+            'value' => $value,
             'wwwroot' => $CFG->wwwroot);
-        $output = $OUTPUT->render_from_template("mod_videostream/hls", $data);
+            $output = $OUTPUT->render_from_template("mod_videostream/hls", $data);
         $output .= $this->video_events($videostream);
         return $output;
     }

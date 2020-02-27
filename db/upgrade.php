@@ -124,6 +124,24 @@ function xmldb_videostream_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2017060403, 'videostream');
     }
 
+   // Added responsive flag field.
+    if ($oldversion < 2017060414) {
+        $table = new xmldb_table('videostream');
+        $disableseekfield = new xmldb_field('disableseek',
+                                           XMLDB_TYPE_INTEGER,
+                                           '4',
+                                           null,
+                                           null,
+                                           null,
+                                           '0');
+
+        // Add field if it doesn't already exist.
+        if (!$dbman->field_exists($table, $disableseekfield)) {
+            $dbman->add_field($table, $disableseekfield);
+        }
+        upgrade_mod_savepoint(true, 2017060414, 'videostream');
+    }
+
     if ($oldversion < 2017060404) {
 
         // Define table videostreambookmarks to be created.

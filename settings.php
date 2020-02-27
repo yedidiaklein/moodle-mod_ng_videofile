@@ -68,7 +68,7 @@ if ($ADMIN->fulltree) {
                                          get_string('limitdimensions', 'videostream'),
                                          get_string('limitdimensions_explain', 'videostream'),
                                          0));
-										 
+
     // Display inline in course listing.
     $settings->add(
         new admin_setting_configcheckbox('videostream/inline',
@@ -76,9 +76,17 @@ if ($ADMIN->fulltree) {
                                          get_string('inline', 'videostream'),
                                          0));
 
+    // Disable users to seek forwards
+    $settings->add(
+        new admin_setting_configcheckbox('videostream/disableseek',
+                                         get_string('disableseek', 'videostream'),
+                                         get_string('disableseek', 'videostream'),
+                                         0));
+
+
 	// dash or hls
 	$settings->add(
-		new admin_setting_configselect('videostream/streaming',
+        new admin_setting_configselect('videostream/streaming',
         get_string('streaming_protocol', 'videostream'), '', '', array("php"=>"php", "symlink"=>"symlink", "dash"=>"dash", "hls"=>"hls")));
 		
 	// Dash base URL

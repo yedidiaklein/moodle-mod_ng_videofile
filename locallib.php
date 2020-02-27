@@ -104,6 +104,7 @@ class videostream {
         $add->width = $formdata->width;
         $add->height = $formdata->height;
         $add->responsive = $formdata->responsive;
+        $add->disableseek = $formdata->disableseek;
         $add->inline = $formdata->inline;
         $add->videoid = $formdata->videoid;
 
@@ -163,6 +164,7 @@ class videostream {
         $update->width = $formdata->width;
         $update->height = $formdata->height;
         $update->responsive = $formdata->responsive;
+        $update->disableseek = $formdata->disableseek;
         $update->inline = $formdata->inline;
         $update->videoid = $formdata->videoid;
 

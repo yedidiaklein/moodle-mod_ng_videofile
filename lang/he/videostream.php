@@ -43,6 +43,9 @@ $string['limitdimensions_explain'] = 'האם גובה ורוחב יוגדרו כ
 $string['inline'] = 'הצג בעמוד הראשי של הקורס?';
 $string['inline_help'] = 'הצג בעמוד הראשי של הקורס?';
 
+// <tovi
+$string['disableseek'] = 'למנוע מהמשתמש לדלג קדימה';
+// tovi>
 $string['filearea_captions'] = 'כתוביות';
 $string['filearea_posters'] = 'תמונה';
 $string['filearea_videos'] = 'סרטונים';

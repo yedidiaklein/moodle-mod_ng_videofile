@@ -43,6 +43,10 @@ $string['limitdimensions_explain'] = 'Specifies if width and height should be us
 $string['inline'] = 'Display inline on main course page?';
 $string['inline_help'] = 'Display inline on main course page?';
 
+// <tovi
+$string['disableseek'] = 'prevent to seek forward';
+// tovi>
+
 $string['filearea_captions'] = 'Captions';
 $string['filearea_posters'] = 'Posters';
 $string['filearea_videos'] = 'Videos';
